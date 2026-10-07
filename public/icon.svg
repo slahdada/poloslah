@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+
+  <!-- Speedometer Arc -->
+  <path d="M 120 320 A 140 140 0 1 1 392 320" fill="none" stroke="#334155" stroke-width="24" stroke-linecap="round" />
+  <path d="M 120 320 A 140 140 0 1 1 340 180" fill="none" stroke="url(#accent)" stroke-width="24" stroke-linecap="round" />
+
+  <!-- Speedometer Needle -->
+  <line x1="256" y1="260" x2="310" y2="190" stroke="#f43f5e" stroke-width="8" stroke-linecap="round" />
+  <circle cx="256" cy="260" r="16" fill="#f8fafc" />
+  <circle cx="256" cy="260" r="8" fill="#f43f5e" />
+
+  <!-- Car Silhouette -->
+  <path d="M 140 370 C 140 355 155 345 175 342 L 210 335 L 235 305 C 242 296 255 292 268 292 L 315 292 C 328 292 340 298 346 308 L 368 335 L 395 342 C 415 345 425 356 425 370 L 425 390 C 425 396 420 400 414 400 L 400 400 C 400 385 385 372 370 372 C 355 372 340 385 340 400 L 225 400 C 225 385 210 372 195 372 C 180 372 165 385 165 400 L 150 400 C 144 400 140 396 140 390 Z" fill="#ffffff" />
+  
+  <!-- Wheels -->
+  <circle cx="195" cy="400" r="22" fill="#0f172a" stroke="#14b8a6" stroke-width="6" />
+  <circle cx="370" cy="400" r="22" fill="#0f172a" stroke="#14b8a6" stroke-width="6" />
+
+  <!-- Car Windows -->
+  <path d="M 238 333 L 254 310 C 257 306 262 304 268 304 L 290 304 L 290 333 Z" fill="#38bdf8" opacity="0.85" />
+  <path d="M 300 333 L 300 304 L 320 304 C 325 304 330 307 333 312 L 348 333 Z" fill="#38bdf8" opacity="0.85" />
+
+  <!-- Brand badge text SLAH -->
+  <rect x="216" y="435" width="80" height="22" rx="6" fill="#14b8a6" />
+  <text x="256" y="451" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="13" fill="#0f172a" text-anchor="middle" letter-spacing="2">SLAH</text>
+</svg>

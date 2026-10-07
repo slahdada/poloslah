@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Profil utilisateur connecté via Google",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "email"]
+    },
+    "UserVehicle": {
+      "title": "UserVehicle",
+      "description": "Véhicule d'un utilisateur",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "brand": { "type": "string" },
+        "model": { "type": "string" },
+        "plate": { "type": "string" },
+        "energy": { "type": "string" },
+        "initialOdometer": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "name"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Profils des utilisateurs authentifiés"
+    },
+    "/users/{userId}/vehicles/{vehicleId}": {
+      "schema": "UserVehicle",
+      "description": "Véhicules sauvegardés dans le cloud pour cet utilisateur"
+    }
+  }
+}
