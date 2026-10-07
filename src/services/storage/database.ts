@@ -11,6 +11,7 @@ import {
   VehicleDocument,
   Deadline,
   AppSettings,
+  AppUser,
 } from '../../types/index.ts';
 import {
   STORES,
@@ -238,5 +239,38 @@ export const Database = {
     if (data.documents?.length) await putManyInStore(STORES.DOCUMENTS, data.documents);
     if (data.deadlines?.length) await putManyInStore(STORES.DEADLINES, data.deadlines);
     if (data.settings) await this.saveSettings(data.settings);
+  },
+
+  // Gestion de la session utilisateur locale / hors-ligne
+  async getActiveUser(): Promise<AppUser | null> {
+    try {
+      const stored = localStorage.getItem('carnet_active_user');
+      if (stored) {
+        return JSON.parse(stored) as AppUser;
+      }
+    } catch (e) {
+      console.warn('Erreur lecture active user:', e);
+    }
+    return null;
+  },
+
+  async saveActiveUser(user: AppUser | null): Promise<void> {
+    try {
+      if (user) {
+        localStorage.setItem('carnet_active_user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('carnet_active_user');
+      }
+    } catch (e) {
+      console.warn('Erreur sauvegarde active user:', e);
+    }
+  },
+
+  async clearActiveUser(): Promise<void> {
+    try {
+      localStorage.removeItem('carnet_active_user');
+    } catch (e) {
+      console.warn('Erreur suppression active user:', e);
+    }
   },
 };

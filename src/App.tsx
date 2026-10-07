@@ -136,7 +136,7 @@ const AppContent: React.FC = () => {
     : null;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500/20 selection:text-teal-200">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-teal-500/20 selection:text-teal-200">
       {/* Alerte hors-ligne discrète */}
       <OfflineIndicator />
 
@@ -149,7 +149,7 @@ const AppContent: React.FC = () => {
       />
 
       {/* Conteneur principal fluide */}
-      <main className="flex-1 mx-auto w-full max-w-7xl px-3 sm:px-6 pt-4 pb-20 sm:pb-8">
+      <main className="flex-1 mx-auto w-full max-w-7xl px-3 sm:px-6 pt-3 sm:pt-4 pb-32 sm:pb-12 overflow-x-hidden">
         {currentTab === 'dashboard' && (
           <DashboardView
             onNavigateTab={(tab) => setCurrentTab(tab as TabType)}

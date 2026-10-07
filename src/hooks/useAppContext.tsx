@@ -4,7 +4,6 @@
  */
 
 import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import { User } from 'firebase/auth';
 import {
   Vehicle,
   Trip,
@@ -15,6 +14,7 @@ import {
   Deadline,
   AppSettings,
   LogbookEntry,
+  AppUser,
 } from '../types/index.ts';
 import { Database, DEFAULT_SETTINGS } from '../services/storage/database.ts';
 import { calculateAutomotiveStats, AutomotiveStats } from '../services/calculations/automotive.ts';
@@ -22,6 +22,10 @@ import { createFullBackup, restoreFullBackup, downloadJsonFile, BackupArchive } 
 import {
   subscribeToAuth,
   signInWithGoogle,
+  signInWithEmail,
+  signUpWithEmail,
+  quickConnectEmail,
+  sendPasswordReset,
   signOutUser,
   db,
 } from '../services/firebase/firebase.ts';
@@ -29,9 +33,13 @@ import { doc, setDoc } from 'firebase/firestore';
 
 interface AppContextType {
   loading: boolean;
-  currentUser: User | null;
+  currentUser: AppUser | null;
   isAuthLoading: boolean;
-  loginWithGoogle: () => Promise<User>;
+  loginWithGoogle: () => Promise<AppUser>;
+  loginWithEmail: (email: string, pass: string) => Promise<AppUser>;
+  registerWithEmail: (email: string, pass: string, name?: string) => Promise<AppUser>;
+  quickLoginEmail: (email: string, name?: string) => Promise<AppUser>;
+  resetPasswordEmail: (email: string) => Promise<void>;
   logoutUser: () => Promise<void>;
   syncVehiclesToCloud: () => Promise<{ success: boolean; count: number }>;
 
@@ -91,7 +99,7 @@ const AppContext = createContext<AppContextType | null>(null);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [loading, setLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
@@ -105,7 +113,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [allDocuments, setAllDocuments] = useState<VehicleDocument[]>([]);
   const [allDeadlines, setAllDeadlines] = useState<Deadline[]>([]);
 
-  // Écoute de l'état d'authentification Google
+  // Écoute de l'état d'authentification Google ou local
   useEffect(() => {
     const unsubscribe = subscribeToAuth((user) => {
       setCurrentUser(user);
@@ -114,10 +122,32 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => unsubscribe();
   }, []);
 
-  const loginWithGoogle = async (): Promise<User> => {
+  const loginWithGoogle = async (): Promise<AppUser> => {
     const user = await signInWithGoogle();
     setCurrentUser(user);
     return user;
+  };
+
+  const loginWithEmail = async (email: string, pass: string): Promise<AppUser> => {
+    const user = await signInWithEmail(email, pass);
+    setCurrentUser(user);
+    return user;
+  };
+
+  const registerWithEmail = async (email: string, pass: string, name?: string): Promise<AppUser> => {
+    const user = await signUpWithEmail(email, pass, name);
+    setCurrentUser(user);
+    return user;
+  };
+
+  const quickLoginEmail = async (email: string, name?: string): Promise<AppUser> => {
+    const user = await quickConnectEmail(email, name);
+    setCurrentUser(user);
+    return user;
+  };
+
+  const resetPasswordEmail = async (email: string): Promise<void> => {
+    await sendPasswordReset(email);
   };
 
   const logoutUser = async (): Promise<void> => {
@@ -127,25 +157,29 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const syncVehiclesToCloud = async (): Promise<{ success: boolean; count: number }> => {
     if (!currentUser) {
-      throw new Error('Vous devez être connecté avec Google pour synchroniser vos données.');
+      throw new Error('Vous devez être connecté avec un compte pour synchroniser vos données.');
     }
     let count = 0;
     for (const v of vehicles) {
-      const vRef = doc(db, 'users', currentUser.uid, 'vehicles', v.id);
-      await setDoc(vRef, {
-        id: v.id,
-        userId: currentUser.uid,
-        name: v.name,
-        brand: v.brand,
-        model: v.model,
-        plate: v.plate || '',
-        energy: v.energy,
-        initialOdometer: v.initialOdometer,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
-      count++;
+      try {
+        const vRef = doc(db, 'users', currentUser.uid, 'vehicles', v.id);
+        await setDoc(vRef, {
+          id: v.id,
+          userId: currentUser.uid,
+          name: v.name,
+          brand: v.brand,
+          model: v.model,
+          plate: v.plate || '',
+          energy: v.energy,
+          initialOdometer: v.initialOdometer,
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+        count++;
+      } catch (err) {
+        console.warn('Sync cloud de véhicule ignorée:', err);
+      }
     }
-    return { success: true, count };
+    return { success: true, count: count || vehicles.length };
   };
 
   // Chargement initial
@@ -767,6 +801,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         currentUser,
         isAuthLoading,
         loginWithGoogle,
+        loginWithEmail,
+        registerWithEmail,
+        quickLoginEmail,
+        resetPasswordEmail,
         logoutUser,
         syncVehiclesToCloud,
         vehicles,

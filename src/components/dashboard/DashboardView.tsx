@@ -53,10 +53,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   return (
     <div className="space-y-5 pb-8">
       {/* Carte Véhicule principal */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-850 p-4 sm:p-6 shadow-xl">
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700/60 overflow-hidden shadow-md">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-slate-900 to-slate-850 p-3.5 sm:p-6 shadow-xl w-full max-w-full">
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 min-w-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="relative flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700/60 overflow-hidden shadow-md">
               {activeVehicle.photoUrl ? (
                 <img
                   src={activeVehicle.photoUrl}
@@ -64,21 +64,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <Car className="h-7 w-7 text-teal-400" />
+                <Car className="h-6 w-6 sm:h-7 sm:w-7 text-teal-400" />
               )}
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base sm:text-xl font-bold tracking-tight text-white truncate">
                   {activeVehicle.name}
                 </h1>
                 {activeVehicle.energy && (
-                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20">
+                  <span className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/20 shrink-0">
                     {activeVehicle.energy}
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate">
                 {activeVehicle.brand} {activeVehicle.model}{' '}
                 {activeVehicle.year ? `(${activeVehicle.year})` : ''}{' '}
                 {activeVehicle.plate ? `• ${activeVehicle.plate}` : ''}
@@ -86,10 +86,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
             <button
               onClick={onEditVehicle}
-              className="px-3.5 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-xs font-medium text-slate-200 transition min-h-[44px]"
+              className="px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800/80 hover:bg-slate-750 text-xs font-medium text-slate-200 transition min-h-[40px] sm:min-h-[44px]"
             >
               Modifier la fiche
             </button>
@@ -100,19 +100,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="absolute top-0 right-0 -mr-16 -mt-16 h-48 w-48 rounded-full bg-teal-500/10 blur-3xl pointer-events-none" />
       </div>
 
-      {/* Bannière de connexion Google si non connecté */}
+      {/* Bannière de connexion Google / Email si non connecté */}
       {!currentUser && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-sm w-full max-w-full overflow-hidden">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 shrink-0">
               <Cloud className="h-5 w-5" />
             </div>
-            <div>
-              <h4 className="font-semibold text-slate-100 text-xs sm:text-sm">
-                Synchronisation Cloud disponible
+            <div className="min-w-0">
+              <h4 className="font-semibold text-slate-100 text-xs sm:text-sm truncate">
+                Connexion & Synchronisation Cloud
               </h4>
-              <p className="text-[11px] text-slate-400">
-                Connectez-vous avec votre compte Google pour sauvegarder et synchroniser vos données sur tous vos appareils.
+              <p className="text-[11px] text-slate-400 line-clamp-2">
+                Connectez-vous par e-mail ou Google pour sécuriser vos données (compatible Vercel & mobile).
               </p>
             </div>
           </div>
@@ -124,7 +124,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Signalement d'incohérences kilométriques éventuelles */}
       {stats && stats.warnings.length > 0 && (
-        <div className="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-4 space-y-2">
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-3.5 sm:p-4 space-y-2 w-full max-w-full overflow-hidden">
           <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs sm:text-sm">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             <span>Incohérence kilométrique détectée</span>
@@ -143,59 +143,59 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       )}
 
       {/* Indicateurs clés (KPI) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 w-full max-w-full">
         {/* Kilométrage actuel */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium">Kilométrage actuel</span>
-            <div className="p-2 rounded-xl bg-teal-500/10 text-teal-400">
-              <Gauge className="h-4 w-4" />
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-3 sm:p-4 flex flex-col justify-between min-w-0 overflow-hidden">
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="text-[11px] sm:text-xs font-medium truncate">Kilométrage actuel</span>
+            <div className="p-1.5 sm:p-2 rounded-xl bg-teal-500/10 text-teal-400 shrink-0">
+              <Gauge className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-lg sm:text-2xl font-bold text-white tracking-tight">
+          <div className="mt-2 sm:mt-3 min-w-0">
+            <div className="text-base sm:text-2xl font-bold text-white tracking-tight truncate font-mono">
               {formatKm(stats?.currentOdometer)}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate font-mono">
               +{formatKm(stats?.totalDistanceRecorded)} enregistrés
             </p>
           </div>
         </div>
 
         {/* Dépenses du mois */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium">Dépenses ce mois</span>
-            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400">
-              <DollarSign className="h-4 w-4" />
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-3 sm:p-4 flex flex-col justify-between min-w-0 overflow-hidden">
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="text-[11px] sm:text-xs font-medium truncate">Dépenses ce mois</span>
+            <div className="p-1.5 sm:p-2 rounded-xl bg-cyan-500/10 text-cyan-400 shrink-0">
+              <DollarSign className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-lg sm:text-xl font-bold text-white tracking-tight">
+          <div className="mt-2 sm:mt-3 min-w-0">
+            <div className="text-sm sm:text-xl font-bold text-white tracking-tight truncate font-mono">
               {formatCurrency(stats?.monthExpenses, settings.currency, settings.currencyDecimals)}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate font-mono">
               Année : {formatCurrency(stats?.yearExpenses, settings.currency, settings.currencyDecimals)}
             </p>
           </div>
         </div>
 
         {/* Consommation */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium">Consommation réelle</span>
-            <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
-              <Fuel className="h-4 w-4" />
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-3 sm:p-4 flex flex-col justify-between min-w-0 overflow-hidden">
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="text-[11px] sm:text-xs font-medium truncate">Consommation réelle</span>
+            <div className="p-1.5 sm:p-2 rounded-xl bg-emerald-500/10 text-emerald-400 shrink-0">
+              <Fuel className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-base sm:text-xl font-bold text-white tracking-tight">
+          <div className="mt-2 sm:mt-3 min-w-0">
+            <div className="text-sm sm:text-xl font-bold text-white tracking-tight truncate">
               {stats?.hasSufficientFuelData
                 ? `${stats.averageConsumption?.toFixed(2)} ${isEv ? 'kWh' : 'L'}/100`
                 : 'Données insuffisantes'}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1">
-              {stats?.totalFuelQuantity.toFixed(1)} {isEv ? 'kWh' : 'L'} achetés au total
+            <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 truncate">
+              {stats?.totalFuelQuantity.toFixed(1)} {isEv ? 'kWh' : 'L'} achetés
             </p>
           </div>
         </div>
@@ -203,33 +203,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Prochaines échéances */}
         <div
           onClick={() => onNavigateTab('deadlines')}
-          className="rounded-2xl border border-slate-800 bg-slate-900/80 p-4 flex flex-col justify-between cursor-pointer hover:border-slate-700 transition"
+          className="rounded-2xl border border-slate-800 bg-slate-900/80 p-3 sm:p-4 flex flex-col justify-between cursor-pointer hover:border-slate-700 transition min-w-0 overflow-hidden"
         >
-          <div className="flex items-center justify-between text-slate-400">
-            <span className="text-xs font-medium">Échéances</span>
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="text-[11px] sm:text-xs font-medium truncate">Échéances</span>
             <div
-              className={`p-2 rounded-xl ${
+              className={`p-1.5 sm:p-2 rounded-xl shrink-0 ${
                 stats && stats.deadlinesSummary.overdue > 0
                   ? 'bg-rose-500/10 text-rose-400'
                   : 'bg-amber-500/10 text-amber-400'
               }`}
             >
-              <CalendarClock className="h-4 w-4" />
+              <CalendarClock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
           </div>
-          <div className="mt-3">
-            <div className="text-base sm:text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <div className="mt-2 sm:mt-3 min-w-0">
+            <div className="text-sm sm:text-xl font-bold text-white tracking-tight truncate flex items-center gap-1.5">
               {stats && stats.deadlinesSummary.overdue > 0 ? (
-                <span className="text-rose-400 font-bold">{stats.deadlinesSummary.overdue} dépassée(s)</span>
+                <span className="text-rose-400 font-bold truncate">{stats.deadlinesSummary.overdue} dépassée(s)</span>
               ) : stats && stats.deadlinesSummary.soon > 0 ? (
-                <span className="text-amber-400">{stats.deadlinesSummary.soon} bientôt</span>
+                <span className="text-amber-400 truncate">{stats.deadlinesSummary.soon} bientôt</span>
               ) : (
-                <span className="text-teal-400">À jour</span>
+                <span className="text-teal-400 truncate">À jour</span>
               )}
             </div>
-            <p className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+            <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 flex items-center gap-1 truncate">
               <span>Voir les rappels</span>
-              <ChevronRight className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3 shrink-0" />
             </p>
           </div>
         </div>

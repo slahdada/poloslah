@@ -4,6 +4,14 @@
 
 export type EnergyType = 'essence' | 'diesel' | 'electrique' | 'hybride' | 'gpl' | 'autre';
 
+export interface AppUser {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL?: string | null;
+  provider: 'google' | 'firebase-email' | 'local-email';
+}
+
 export interface Vehicle {
   id: string;
   name: string;

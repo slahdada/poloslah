@@ -351,20 +351,20 @@ export const MaintenanceFormModal: React.FC<MaintenanceFormModalProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-3 border-t border-slate-800">
           <button
             type="button"
             onClick={onClose}
-            className="min-h-[44px] px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 transition"
+            className="w-full sm:w-auto min-h-[44px] px-4 py-2 rounded-xl text-slate-300 hover:bg-slate-800 transition text-center cursor-pointer"
           >
             Annuler
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="min-h-[44px] px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 font-semibold text-white shadow-md transition disabled:opacity-50"
+            className="w-full sm:w-auto min-h-[46px] px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 font-semibold text-white shadow-md transition disabled:opacity-50 cursor-pointer"
           >
-            {isSubmitting ? 'Enregistrement...' : "Enregistrer l'entretien"}
+            {isSubmitting ? 'Enregistrement...' : "Enregistrer l'intervention"}
           </button>
         </div>
       </form>
